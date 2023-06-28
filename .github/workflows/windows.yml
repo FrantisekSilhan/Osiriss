@@ -4,16 +4,24 @@ on: [push, pull_request]
 
 jobs:
   msbuild:
-    runs-on: windows-2022
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2022]
+        toolset: [MSVC]
+        exclude:
+          - os: windows-2019
+            toolset: ClangCL
     steps:
     - uses: actions/checkout@v3
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
     - name: Set toolset
-      run: echo "toolset=/p:PlatformToolset=MSVC" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      if: matrix.toolset == 'ClangCL'
+      run: echo "toolset=/p:PlatformToolset=${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Build Release
       shell: cmd
-      run: msbuild Osiris.sln /p:Platform=x86 /p:Configuration=Release MSVC
+      run: msbuild Osiris.sln /p:Platform=x86 /p:Configuration=Release ${{ env.toolset }}
     - name: Publish DLL as Artifact
       uses: actions/upload-artifact@v2
       with:
