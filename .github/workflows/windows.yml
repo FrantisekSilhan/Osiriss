@@ -7,14 +7,14 @@ jobs:
     runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
-    - name: Build Release
-      shell: cmd
-      run: msbuild Osiris.sln /p:Platform=x86 /p:Configuration=Release /p:PlatformToolset=MSVC
-    - name: Publish DLL as Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: OsirisDll
-        path: ./Release/Osiris.dll
+      - uses: actions/checkout@v3
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Build Release
+        shell: cmd
+        run: msbuild Osiris.sln /p:Platform=x86 /p:Configuration=Release /p:PlatformToolset=MSVC
+      - name: Publish DLL as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: OsirisDll
+          path: ./Release/Osiris.dll
