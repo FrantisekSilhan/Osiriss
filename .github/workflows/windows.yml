@@ -16,9 +16,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
-    - name: Set toolset
-      if: matrix.toolset == 'ClangCL'
-      run: echo "toolset=/p:PlatformToolset=${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Print Toolset
       run: echo ${{ env.toolset }}
     - name: Build Release
