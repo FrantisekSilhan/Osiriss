@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   msbuild:
-    runs-on: ${{ env.toolset }}
+    runs-on: ${{ matrix.toolset }}
     strategy:
       matrix:
         os: [windows-2022]
@@ -19,6 +19,8 @@ jobs:
     - name: Set toolset
       if: matrix.toolset == 'ClangCL'
       run: echo "toolset=/p:PlatformToolset=${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    - name: Print Toolset
+      run: echo ${{ env.toolset }}
     - name: Build Release
       shell: cmd
       run: msbuild Osiris.sln /p:Platform=x86 /p:Configuration=Release ${{ env.toolset }}
